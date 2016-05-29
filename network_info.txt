@@ -1,0 +1,39 @@
+# find the IP of the host 
+  hostname -I
+
+# determine IP address of network gateway
+  route -n | awk '/^0/ { print $2 }'
+
+# determine the network mask
+  route -n | awk '/^[1-9]/ { print $3 }'
+
+# set up static ip on raspberry pi - edit /etc/network/interfaces to look like the following 
+   auto lo
+   iface lo inet loopback
+
+   auto eth0
+   allow-hotplug eth0
+   iface eth0 inet static    
+       address 192.168.2.13    
+       netmask 255.255.255.0    
+       gateway 192.168.2.1
+
+    auto wlan0
+    allow-hotplug wlan0
+    iface wlan0 inet manual
+    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+    auto wlan1
+    allow-hotplug wlan1
+    iface wlan1 inet manual
+    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf~ 
+
+
+
+    ~ "/etc/network/interfaces" 20 lines, 370 characters
+
+   #save file and reboot
+
+
+   #display hardware address of network interface
+     ifconfig | awk '/^eth0/ { print $5 }'
